@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: svart-qms
+  namespace: react-pwa
+  labels:
+    app: svart-qms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: svart-qms
+  template:
+    metadata:
+      labels:
+        app: svart-qms
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - image: anubhavv09/pwa-frontend-app:latest
+        name: svart-qms
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        volumeMounts:

@@ -1,0 +1,51 @@
+{
+  "analysis": {
+    "analyzer": {
+      "custom_analyzer": {
+        "type": "custom",
+        "tokenizer": "standard",
+        "filter": [
+          "lowercase",
+          "asciifolding",
+          "stop",
+          "edge_ngram_filter",
+          "synonym_filter"
+        ]
+      },
+      "search_analyzer": {
+        "type": "custom",
+        "tokenizer": "standard",
+        "filter": [
+          "lowercase",
+          "asciifolding",
+          "stop"
+        ]
+      },
+      "keyword_analyzer": {
+        "type": "custom",
+        "tokenizer": "keyword",
+        "filter": [
+          "lowercase",
+          "asciifolding"
+        ]
+      }
+    },
+    "filter": {
+      "edge_ngram_filter": {
+        "type": "edge_ngram",
+        "min_gram": 2,
+        "max_gram": 20
+      },
+      "synonym_filter": {
+        "type": "synonym",
+        "synonyms": [
+          "t-shirt, tshirt, t shirt",
+          "shirt, shirts",
+          "jeans, denim, pants",
+          "trousers, pants",
+          "sneakers, shoes, footwear"
+        ]
+      }
+    }
+  }
+}
