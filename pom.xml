@@ -29,6 +29,8 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<docker.image.prefix>amcart</docker.image.prefix>
+		<docker.image.name>${project.artifactId}</docker.image.name>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -65,6 +67,16 @@
 			<artifactId>elasticsearch-rest-high-level-client</artifactId>
 			<version>7.17.0</version>
 		</dependency>
+		<!-- <dependency>
+			<groupId>co.elastic.clients</groupId>
+			<artifactId>elasticsearch-java</artifactId>
+			<version>8.17.4</version>
+		</dependency>
+		<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.17.1</version>
+		</dependency> -->
 		<dependency>
 			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
@@ -118,9 +130,57 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<layers>
+						<enabled>true</enabled>
+					</layers>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.43.0</version>
+				<configuration>
+					<images>
+						<image>
+							<name>${docker.image.prefix}/${docker.image.name}</name>
+							<build>
+								<from>eclipse-temurin:21-jdk-alpine</from>
+								<assembly>
+									<descriptorRef>artifact</descriptorRef>
+								</assembly>
+								<ports>
+									<port>8080</port>
+								</ports>
+								<env>
+									<SPRING_PROFILES_ACTIVE>cloud</SPRING_PROFILES_ACTIVE>
+								</env>
+								<cmd>
+									<shell>java $JAVA_OPTS -jar
+										maven/${project.artifactId}-${project.version}.jar</shell>
+								</cmd>
+							</build>
+						</image>
+					</images>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<spring.profiles.active>local</spring.profiles.active>
+			</properties>
+		</profile>
+		<profile>
+			<id>cloud</id>
+			<properties>
+				<spring.profiles.active>cloud</spring.profiles.active>
+			</properties>
+		</profile>
+	</profiles>
 </project>

@@ -10,10 +10,10 @@ import org.springframework.data.elasticsearch.repository.config.EnableElasticsea
 @EnableElasticsearchRepositories(basePackages = "com.nagarro.amcart.repository.elasticsearch")
 public class ElasticSearchConfig extends ElasticsearchConfiguration {
 
-    @Value("${elasticsearch.host:localhost}")
+    @Value("${elasticsearch.host}")
     private String host;
 
-    @Value("${elasticsearch.port:9200}")
+    @Value("${elasticsearch.port}")
     private int port;
 
     @Value("${elasticsearch.username:elastic}")

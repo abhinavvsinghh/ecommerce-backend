@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-elasticsearch-access
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: amcart-backend
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: elastic-system
+          podSelector:
+            matchLabels:
+              app: quickstart-es-http
+      ports:
+        - protocol: TCP
+          port: 9200

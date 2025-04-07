@@ -15,16 +15,22 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.nagarro.amcart.security.JwtAuthenticationFilter;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@Slf4j
 public class SecurityConfig {
 
-    @Value("${client.origin:http://localhost:3000}")
+    @Value("${client.origin}")
     private String clientOrigin;
+    
+    @Value("${cors.allowed-origins:*}")
+    private String corsAllowedOrigins;
     
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -35,7 +41,16 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(clientOrigin));
+        
+        // Set allowed origins based on configuration
+        if ("*".equals(corsAllowedOrigins)) {
+            configuration.setAllowedOriginPatterns(List.of("*"));
+            log.info("CORS configured to allow all origins");
+        } else {
+            configuration.setAllowedOrigins(List.of(clientOrigin));
+            log.info("CORS configured to allow specific origin: {}", clientOrigin);
+        }
+        
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
@@ -45,7 +60,7 @@ public class SecurityConfig {
         return source;
     }
 
-    @Value("${aws.cognito.jwkUrl:https://cognito-idp.us-east-2.amazonaws.com/us-east-2_EB9d7nP5j/.well-known/jwks.json}")
+    @Value("${aws.cognito.jwkUrl}")
     private String jwkUrl;
 
     @Bean
@@ -60,6 +75,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/products/**").permitAll()
                 .requestMatchers("/api/categories/**").permitAll()
                 .requestMatchers("/api/search/**").permitAll()
+                .requestMatchers("/actuator/**").permitAll()
                 // Protected endpoints
                 .requestMatchers("/api/cart/**").authenticated()
                 .requestMatchers("/api/profile/**").authenticated()

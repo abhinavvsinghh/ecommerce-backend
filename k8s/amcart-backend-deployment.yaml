@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: amcart-backend
+  namespace: amcart-backend
+  labels:
+    app: amcart-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: amcart-backend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: amcart-backend
+    spec:
+      containers:
+        - name: amcart-backend
+          image: abhinavvsinghh/amcart-backend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "cloud"
+            # Load all config from ConfigMap
+            - name: MONGODB_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: amcart-backend-config
+                  key: MONGODB_URI
+            - name: MONGODB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: amcart-backend-config
+                  key: MONGODB_DATABASE
+            - name: AWS_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: amcart-backend-config
+                  key: AWS_REGION
+            - name: COGNITO_USER_POOL_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: amcart-backend-config
+                  key: COGNITO_USER_POOL_ID
+            - name: COGNITO_CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: amcart-backend-config
+                  key: COGNITO_CLIENT_ID
+            - name: ELASTICSEARCH_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: amcart-backend-config
+                  key: ELASTICSEARCH_HOST
+            - name: ELASTICSEARCH_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: amcart-backend-config
+                  key: ELASTICSEARCH_PORT
+            - name: ELASTICSEARCH_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: amcart-backend-config
+                  key: ELASTICSEARCH_USERNAME
+            - name: CLIENT_ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  name: amcart-backend-config
+                  key: CLIENT_ORIGIN
+            # Load secrets
+            - name: ELASTICSEARCH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: amcart-backend-secret
+                  key: ELASTICSEARCH_PASSWORD
+            - name: APP_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: amcart-backend-secret
+                  key: APP_JWT_SECRET
+            # Java options for memory management
+            - name: JAVA_OPTS
+              value: "-Xms512m -Xmx1024m"
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "200m"
+            limits:
+              memory: "1024Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 90
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 12
+      restartPolicy: Always

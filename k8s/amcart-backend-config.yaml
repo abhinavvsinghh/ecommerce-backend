@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: amcart-backend-config
+  namespace: amcart-backend
+  labels:
+    app: amcart-backend
+data:
+  # MongoDB Configuration
+  MONGODB_URI: "mongodb+srv://abhinavs175:0TGaZJ9eU1sae6lQ@cluster0.ix4px.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+  MONGODB_DATABASE: "nagp-amcart"
+  
+  # AWS Cognito Configuration
+  AWS_REGION: "us-east-2"
+  COGNITO_USER_POOL_ID: "us-east-2_EB9d7nP5j"
+  COGNITO_CLIENT_ID: "30ik4vbmia1l63q3h1am8mpnhq"
+  
+  # ElasticSearch Configuration
+  ELASTICSEARCH_HOST: "10.110.196.227"
+  ELASTICSEARCH_PORT: "9200"
+  ELASTICSEARCH_USERNAME: "elastic"
+  
+  # Client Configuration
+  CLIENT_ORIGIN: "http://amcart-frontend"
+  
+  # Logging Configuration
+  LOGGING_LEVEL_ROOT: "INFO"
+  LOGGING_LEVEL_COM_NAGARRO_AMCART: "INFO"
