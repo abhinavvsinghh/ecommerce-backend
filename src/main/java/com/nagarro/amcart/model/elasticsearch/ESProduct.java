@@ -28,7 +28,7 @@ public class ESProduct {
     @Field(type = FieldType.Text, analyzer = "custom_analyzer", searchAnalyzer = "search_analyzer")
     private String name;
     
-    @Field(type = FieldType.Keyword, normalizer = "keyword_analyzer")
+    @Field(type = FieldType.Keyword, normalizer = "keyword_normalizer")
     private String nameKeyword;
     
     @Field(type = FieldType.Text, analyzer = "custom_analyzer", searchAnalyzer = "search_analyzer")
@@ -37,16 +37,16 @@ public class ESProduct {
     @Field(type = FieldType.Double)
     private BigDecimal price;
     
-    @Field(type = FieldType.Text, analyzer = "custom_analyzer")
+    @Field(type = FieldType.Text, analyzer = "synonym_analyzer")
     private String brand;
     
-    @Field(type = FieldType.Keyword, normalizer = "keyword_analyzer")
+    @Field(type = FieldType.Keyword, normalizer = "keyword_normalizer")
     private String brandKeyword;
     
     @Field(type = FieldType.Text, analyzer = "custom_analyzer")
     private String color;
     
-    @Field(type = FieldType.Keyword, normalizer = "keyword_analyzer")
+    @Field(type = FieldType.Keyword, normalizer = "keyword_normalizer")
     private String colorKeyword;
     
     @Field(type = FieldType.Keyword)
@@ -55,10 +55,10 @@ public class ESProduct {
     @Field(type = FieldType.Keyword)
     private String categoryId;
     
-    @Field(type = FieldType.Text, analyzer = "custom_analyzer")
+    @Field(type = FieldType.Text, analyzer = "synonym_analyzer")
     private String categoryName;
     
-    @Field(type = FieldType.Keyword, normalizer = "keyword_analyzer")
+    @Field(type = FieldType.Keyword, normalizer = "keyword_normalizer")
     private String categoryNameKeyword;
     
     @Field(type = FieldType.Boolean)

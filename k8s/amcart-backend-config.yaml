@@ -21,7 +21,7 @@ data:
   ELASTICSEARCH_USERNAME: "elastic"
   
   # Client Configuration
-  CLIENT_ORIGIN: "http://amcart-frontend"
+  CLIENT_ORIGIN: "https://amcart-nagarro.c-418bb73.kyma.ondemand.com"
   
   # Logging Configuration
   LOGGING_LEVEL_ROOT: "INFO"

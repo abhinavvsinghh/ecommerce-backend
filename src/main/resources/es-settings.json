@@ -8,7 +8,16 @@
           "lowercase",
           "asciifolding",
           "stop",
-          "edge_ngram_filter",
+          "edge_ngram_filter"
+        ]
+      },
+      "synonym_analyzer": {
+        "type": "custom",
+        "tokenizer": "standard",
+        "filter": [
+          "lowercase",
+          "asciifolding",
+          "stop",
           "synonym_filter"
         ]
       },
@@ -20,10 +29,11 @@
           "asciifolding",
           "stop"
         ]
-      },
-      "keyword_analyzer": {
+      }
+    },
+    "normalizer": {
+      "keyword_normalizer": {
         "type": "custom",
-        "tokenizer": "keyword",
         "filter": [
           "lowercase",
           "asciifolding"
