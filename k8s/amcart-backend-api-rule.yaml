@@ -7,6 +7,24 @@ spec:
   hosts:
     - amcart-backend
   gateway: kyma-system/kyma-gateway
+  corsPolicy:
+    allowHeaders:
+      - "Authorization"
+      - "Content-Type"
+      - "Accept"
+    allowMethods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+    allowOrigins:
+      - regex: ".*"
+    allowCredentials: true
+    exposeHeaders:
+      - "Authorization"
+      - "Content-Type"
+    maxAge: 3600  
   service:
     name: amcart-backend
     namespace: amcart-backend
